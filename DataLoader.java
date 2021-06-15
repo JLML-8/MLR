@@ -32,7 +32,7 @@ public class DataLoader {
                         datos[j][i] = entrada.nextDouble();
                 }  
             }    
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
             System.out.println("No se ha encontrado el archivo solicitado");
         }
         return datos;

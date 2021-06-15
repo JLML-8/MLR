@@ -11,15 +11,32 @@
  */
 public class Matriz {
 
-    double[][] matriz;
-    int filas = 0;
-    int columnas = 0;
+    private double[][] matriz;
+    private double[][] datosY;
+    private int filas = 0;
+    private int columnas = 0;
 
     public Matriz(double[][] matriz, int filas, int columnas) {
         this.matriz = new double[filas][columnas];
+        datosY = new double[filas][1];
         this.matriz = matriz;
         this.filas = filas;
         this.columnas = columnas;
+        for(int i = 0; i<filas; i++)
+        {
+            datosY[i][0] = this.matriz[i][2];
+        }
+        for(int j=2; j>0; j--)
+        {
+            for(int i = 0; i<filas; i++)
+                this.matriz[i][j] = this.matriz[i][j-1];
+        }
+        for(int i=0; i<this.filas; i++)
+            this.matriz[i][0] = 1;
+        System.out.println("Matriz original");
+        printMatrix(this.matriz);
+        System.out.println("Datos Y");
+        printMatrix(datosY);
     }
 
     public double[][] transpuesta() {
@@ -34,13 +51,13 @@ public class Matriz {
         return transpuesta;
     }
     
-    public double[][] multiplicarMatrices(double[][] matriz1, double[][] matriz2)
+    public double[][] multiplicarMatrices(double[][] A, double[][] B)
     {
         /*if(matriz1.length!=matriz2[0].length || matriz1[0].length!=matriz2.length){
             System.out.println("Las matrices no se pueden multiplicar porque sus dimensiones no lo permiten");
             System.exit(0);
         }*/
-        if(matriz1[0].length == matriz2.length)
+        /*if(matriz1[0].length == matriz2.length)
         {
         int fila = matriz1.length;
         System.out.println("Filas de la matriz resultante "+fila);
@@ -59,7 +76,28 @@ public class Matriz {
         printMatrix(producto);
         return producto;
         }
-        return null;
+        return null;*/
+        int filasA = A.length;
+        int columnasA = A[0].length;
+        int filasB = B.length;
+        int columnasB = B[0].length;
+        
+        if (columnasA != filasB){
+            throw new IllegalArgumentException("La cantidad de columnas de la matriz A no es igual a la cantidad de filas de la matriz B.");
+        }
+        
+        double[][] resultado = new double[filasA][columnasB];
+        
+        for (int i = 0; i < filasA; i++) {
+            for (int j = 0; j < columnasB; j++) {
+                for (int k = 0; k < columnasA; k++) {
+                    resultado[i][j] += A[i][k] * B[k][j];
+                }
+            }
+        }
+        printMatrix(resultado);
+        return resultado;
+
     }
     
     public double determinante3x3(double[][] matrix)
@@ -154,26 +192,34 @@ public class Matriz {
          A33[1][1] = matrix[1][1];
          
          double[][] adjunta = new double[3][3];
-         adjunta[0][0] = determinante2x2(A11);
-         adjunta[0][1] = determinante2x2(A12);
-         adjunta[0][2] = determinante2x2(A13);
-         adjunta[1][0] = determinante2x2(A21);
-         adjunta[1][1] = determinante2x2(A22);
-         adjunta[1][2] = determinante2x2(A23);
-         adjunta[2][0] = determinante2x2(A31);
-         adjunta[2][1] = determinante2x2(A32);
-         adjunta[2][2] = determinante2x2(A33);
+         adjunta[0][0] = (int) Math.pow(-1, 1+1)*determinante2x2(A11);
+         adjunta[0][1] = (int) Math.pow(-1, 1+2)*determinante2x2(A12);
+         adjunta[0][2] = (int) Math.pow(-1, 1+3)*determinante2x2(A13);
+         adjunta[1][0] = (int) Math.pow(-1, 2+1)*determinante2x2(A21);
+         adjunta[1][1] = (int) Math.pow(-1, 2+2)*determinante2x2(A22);
+         adjunta[1][2] = (int) Math.pow(-1, 2+3)*determinante2x2(A23);
+         adjunta[2][0] = (int) Math.pow(-1, 3+1)*determinante2x2(A31);
+         adjunta[2][1] = (int) Math.pow(-1, 3+2)*determinante2x2(A32);
+         adjunta[2][2] = (int) Math.pow(-1, 3+3)*determinante2x2(A33);
          System.out.println("Imprimiendo las 9 matrices resultantes");
          printMatrix(A11);
+         System.out.println("****************************************");
          printMatrix(A12);
+         System.out.println("****************************************");
          printMatrix(A13);
+         System.out.println("****************************************");
          printMatrix(A21);
+         System.out.println("****************************************");
          printMatrix(A22);
+         System.out.println("****************************************");
          printMatrix(A23);
+         System.out.println("****************************************");
          printMatrix(A31);
+         System.out.println("****************************************");
          printMatrix(A32);
+         System.out.println("****************************************");
          printMatrix(A33);
-         
+         System.out.println("****************************************");
          System.out.println("Imprimiendo adjunta");
          printMatrix(adjunta);
          return adjunta;
@@ -205,5 +251,9 @@ public class Matriz {
             System.out.println("|");
         }
 }
+    public double[][] getDatosY()
+    {
+        return this.datosY;
+    }
     
 }

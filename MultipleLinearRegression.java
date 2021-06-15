@@ -17,9 +17,26 @@ public class MultipleLinearRegression {
     private double b1; 
     private double b2;
     
-    public void metodoMatricial()
+    public void metodoMatricial(double[][] datos)
     {
-        
+            Matriz ej = new Matriz(datos, datos.length, datos[0].length);
+            double[][] matrizY = ej.getDatosY();
+            double[][] transp = ej.transpuesta();
+            System.out.println("Imprimiendo producto de transpuesta por la matriz principal");
+            double[][] prodTransp = ej.multiplicarMatrices(transp, datos);
+            double determ = ej.determinante3x3(prodTransp);
+            double[][] adjunta = ej.adjunta3x3(prodTransp);
+            //hasta aquí todo bien
+            System.out.println("esta es la inversa");
+            double[][] inversa = ej.matrizXEscalar(adjunta, 1 / determ);
+            double[][] productoXtY = ej.multiplicarMatrices(transp, matrizY);
+            System.out.println("Resultado final");
+            double[][] resultado = ej.multiplicarMatrices(inversa, productoXtY);
+            b0 = resultado[0][0];
+            b1 = resultado[1][0];
+            b2 = resultado[2][0];
+            
+            System.out.println("y_hat = "+b0+"+"+b1+"X1"+b2+"X2");       
     }
     
     public void cramer(double[][] matrizDatos)
@@ -51,9 +68,7 @@ public class MultipleLinearRegression {
         double sumX2cuad = sumx2.sumarProductos(x2);
         double sumX2Y = sumx2.sumarProductos(y);
        
-        double beta_0;
-        double beta_1;
-        double beta_2;
+
         double[][] matriz = new double[3][4];
         //primera ecuación
         matriz[0][0]= totalX1;
@@ -133,10 +148,19 @@ public class MultipleLinearRegression {
         System.out.println("Resultado beta0= "+resultadoBeta0);
         System.out.println("Resultado beta1= "+resultadoBeta1);
         System.out.println("Resultado beta2= "+resultadoBeta2);
+        System.out.println("y_hat = "+b0+"+"+b1+"X1"+b2+"X2");
+            
 
     }
     
-    public void calcularY(double x_1, double x_2)
+    public void calcularYCramer(double x_1, double x_2)
+    {
+        double resultadoY = b0+((b1)*(x_1))+((b2)*(x_2));
+        System.out.println("y_hat = "+b0+" + ("+b1+")("+x_1+")+("+b2+")("+x_2+") = "+resultadoY);
+        
+    }
+    
+        public void calcularYMatricial(double x_1, double x_2)
     {
         double resultadoY = b0+((b1)*(x_1))+((b2)*(x_2));
         System.out.println("y_hat = "+b0+" + ("+b1+")("+x_1+")+("+b2+")("+x_2+") = "+resultadoY);

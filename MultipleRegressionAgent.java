@@ -15,50 +15,86 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class MultipleRegressionAgent extends Agent {
+
     boolean seguir = true;
     private double x1 = 0;
     private double x2 = 0;
-    protected void setup()
-    {
-        System.out.println("Agent "+getLocalName()+" started ");
+
+    protected void setup() {
+        System.out.println("Agent " + getLocalName() + " started ");
         addBehaviour(new CramerBehaviour());
+        addBehaviour(new solucionMatricialBehaviour());
     }
+
     private class OptionPaneX {
+
         JFrame f;
+
         OptionPaneX() {
             f = new JFrame();
             x1 = Double.parseDouble(JOptionPane.showInputDialog(f, "Ingresa el valor de X1 para calcular Y"));
             x2 = Double.parseDouble(JOptionPane.showInputDialog(f, "Ingresa el valor de X2 para calcular Y"));
         }
     }
-    
-    private class CramerBehaviour extends Behaviour
-    {
-        public void action(){
+
+    private class CramerBehaviour extends Behaviour {
+
+        public void action() {
             System.out.println("Agent's action method is executed");
             DataLoader data = new DataLoader("C:\\Users\\luis_\\Documents\\datos.txt");
             double[][] datos = data.leerDatos();
             MultipleLinearRegression n = new MultipleLinearRegression();
             n.cramer(datos);
             new OptionPaneX();
-            n.calcularY(x1, x2);
+            n.calcularYCramer(x1, x2);
             System.out.println("¿Desea calcular otro valor? 1 para si, cualquier otro numero para no");
             Scanner reader = new Scanner(System.in);
             int num = 1;
-            if(reader.nextInt()!=1)
+            if (reader.nextInt() != 1) {
                 seguir = false;
+            }
         }
-        
-        public boolean done()
-        {
-            if(seguir)
+
+        public boolean done() {
+            if (seguir) {
                 return false;
-            else
+            } else {
                 return true;
+            }
         }
-        
-        public int onEnd()
-        {
+
+        public int onEnd() {
+            myAgent.doDelete();
+            return super.onEnd();
+        }
+    }
+
+    private class solucionMatricialBehaviour extends Behaviour {
+
+        public void action() {
+            DataLoader data = new DataLoader("C:\\Users\\luis_\\Documents\\datos.txt");
+            double[][] datos = data.leerDatos();
+            MultipleLinearRegression n = new MultipleLinearRegression();
+            n.metodoMatricial(datos);
+            new OptionPaneX();
+            n.calcularYMatricial(x1, x2);
+            System.out.println("¿Desea calcular otro valor? 1 para si, cualquier otro numero para no");
+            Scanner reader = new Scanner(System.in);
+            int num = 1;
+            if (reader.nextInt() != 1) {
+                seguir = false;
+            }
+        }
+
+        public boolean done() {
+            if (seguir) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        public int onEnd() {
             myAgent.doDelete();
             return super.onEnd();
         }
