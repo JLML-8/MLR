@@ -16,6 +16,7 @@ public class Matriz {
     private int filas = 0;
     private int columnas = 0;
 
+    //constructor
     public Matriz(double[][] matriz, int filas, int columnas) {
         this.matriz = new double[filas][columnas];
         datosY = new double[filas][1];
@@ -38,7 +39,7 @@ public class Matriz {
         System.out.println("Datos Y");
         printMatrix(datosY);
     }
-
+    //regresa la transpuesta de la matriz original
     public double[][] transpuesta() {
         double[][] transpuesta = new double[columnas][filas];
         for (int i = 0; i < filas; i++) {
@@ -50,7 +51,7 @@ public class Matriz {
         printMatrix(transpuesta);
         return transpuesta;
     }
-    
+    //multiplica matriz a y b si sus dimensiones lo permiten
     public double[][] multiplicarMatrices(double[][] A, double[][] B)
     {
         /*if(matriz1.length!=matriz2[0].length || matriz1[0].length!=matriz2.length){
@@ -99,7 +100,7 @@ public class Matriz {
         return resultado;
 
     }
-    
+    //te regresa la determinante de la matriz enviada siempre y cuando sea 3x3
     public double determinante3x3(double[][] matrix)
     {
         double[][] matrizAux = new double[3][5];
@@ -127,13 +128,13 @@ public class Matriz {
         System.out.println("Valor de la determinante: "+determ);
         return determ;
     }
-    
+    //regresa la determinante de una matrix 2x2
     public double determinante2x2(double[][] matrix)
     {
         double determin = (matrix[0][0]*matrix[1][1])-(matrix[0][1]*matrix[1][0]);
         return determin;
     }
-    
+    //regresa la matriz adjunta 
     public double[][] adjunta3x3(double[][] matrix)
     {
         double[][] A11 = new double[2][2];
@@ -201,30 +202,9 @@ public class Matriz {
          adjunta[2][0] = (int) Math.pow(-1, 3+1)*determinante2x2(A31);
          adjunta[2][1] = (int) Math.pow(-1, 3+2)*determinante2x2(A32);
          adjunta[2][2] = (int) Math.pow(-1, 3+3)*determinante2x2(A33);
-         System.out.println("Imprimiendo las 9 matrices resultantes");
-         printMatrix(A11);
-         System.out.println("****************************************");
-         printMatrix(A12);
-         System.out.println("****************************************");
-         printMatrix(A13);
-         System.out.println("****************************************");
-         printMatrix(A21);
-         System.out.println("****************************************");
-         printMatrix(A22);
-         System.out.println("****************************************");
-         printMatrix(A23);
-         System.out.println("****************************************");
-         printMatrix(A31);
-         System.out.println("****************************************");
-         printMatrix(A32);
-         System.out.println("****************************************");
-         printMatrix(A33);
-         System.out.println("****************************************");
-         System.out.println("Imprimiendo adjunta");
-         printMatrix(adjunta);
          return adjunta;
     }
-    
+    //multiplica la matriz por un número 
     public double[][] matrizXEscalar(double[][] matrix, double escalar)
     {
         double[][] producto = new double[matrix.length][matrix[0].length];
@@ -238,7 +218,7 @@ public class Matriz {
         printMatrix(producto);
         return producto;
     }
-    
+    //imprime la matriz 
     public void printMatrix(double[][] resultado){
     for (int x = 0; x < resultado.length; x++) {
             System.out.print("|");
